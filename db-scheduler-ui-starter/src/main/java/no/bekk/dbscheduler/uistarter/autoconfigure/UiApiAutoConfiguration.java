@@ -28,6 +28,7 @@ import no.bekk.dbscheduler.ui.service.LogLogic;
 import no.bekk.dbscheduler.ui.service.TaskLogic;
 import no.bekk.dbscheduler.ui.util.Caching;
 import no.bekk.dbscheduler.uistarter.config.DbSchedulerUiProperties;
+import no.bekk.dbscheduler.uistarter.config.DbSchedulerUiWebConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -144,9 +145,16 @@ public class UiApiAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  @ConditionalOnProperty(prefix = "server.servlet", name = "context-path")
+  @ConditionalOnProperty(prefix = "db-scheduler-ui", name = "context-path")
   IndexHtmlController indexHtmlController(
-      @Value("${server.servlet.context-path}") String contextPath) throws IOException {
+      @Value("${db-scheduler-ui.context-path}") String contextPath) throws IOException {
     return new IndexHtmlController(contextPath);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "db-scheduler-ui", name = "context-path")
+  DbSchedulerUiWebConfiguration dbSchedulerUiWebConfiguration(
+      @Value("${db-scheduler-ui.context-path}") String contextPath) {
+    return new DbSchedulerUiWebConfiguration(contextPath);
   }
 }
